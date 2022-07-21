@@ -126,7 +126,21 @@ This function should produce a dataset with `n` rows.
 You should **not** use the default parameter options for these distributions (e.g., your Normal data should not have a mean of 0 or a standard deviation of 1).
 Test your function with `n = 30` and `n = 1000`.
 
+```{r generate-n-samples}
+set.seed(518)
 
+generate_n_samples <- function(n){
+  samples <- tibble(
+    normal = rnorm(n = n, mean = 50, sd = 10),
+    exponential = rexp(n, rate = 0.02)
+  )
+  
+  return(samples)
+}
+
+samp_30 <- generate_n_samples(n = 30)
+
+```
 
 
 Keep the following information in mind for the rest of this activity.
@@ -156,6 +170,8 @@ sample_mean <- function(.data){
   .data %>% 
     summarise(across(everything(), mean, .names = "mean_{.col}"))
 }
+
+sample_mean(samp_30)
 ```
 
 First, verify that you know what each line of this function is doing.
@@ -186,6 +202,16 @@ rerun(1000, rnorm(30, mean = 50, sd = 10))
 # This could also be done in purr::map 
 map(1:1000, ~rnorm(30, mean = 50, sd = 10))
 ```
+
+```{r}
+set.seed(518)
+temp <- rerun(2, rnorm(30, mean = 50, sd = 10))
+for (i in 1:length(temp)) {
+  print(mean(temp[[i]]))
+}
+
+```
+
 
 Continuing to work with your multiple distribution sample generator from above, generate 1,000 samples from the four distributions each with size 30.
 We will want to continue to work with this list so be sure to assign these samples to an appropriately named object (say, `multiple_samples`).
@@ -290,6 +316,12 @@ To do this,
 2. Do (1), 1,000 times
 3. Calculate the mean of each of the 1,000 samples
 4. Calculate what percentage of the sample means waited as long or longer than you.
+
+```{r}
+
+distribution_exploration(n = 30, rep = 1000, mean = 10, sd = 10, rate = 0.2, df = 4, min = 20, max = 40)
+
+```
 
 
 
